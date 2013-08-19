@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>PayloadContent</key>
+	<array/>
+	<key>PayloadDescription</key>
+	<string>Profile description.</string>
+	<key>PayloadDisplayName</key>
+	<string>Profile</string>
+	<key>PayloadIdentifier</key>
+	<string>com.baidu.com.profile</string>
+	<key>PayloadOrganization</key>
+	<string>baidu</string>
+	<key>PayloadRemovalDisallowed</key>
+	<false/>
+	<key>PayloadType</key>
+	<string>Configuration</string>
+	<key>PayloadUUID</key>
+	<string>09276AD8-9C17-43A3-9FE3-D72E173C1D04</string>
+	<key>PayloadVersion</key>
+	<integer>1</integer>
+</dict>
+</plist>
