@@ -6,9 +6,10 @@ var options = {
   cert: fs.readFileSync('indentity.pem')
 };
 
+var test = fs.readFileSync('test.mobileconfig');
 var server = https.createServer(options,function (req,res) {
-  res.writeHead(200,{'Content-Type': 'text/plain'});
-  res.end('Hello World');
+  res.writeHead(200,{'Content-Type': 'text/xml'});
+  res.end(test);
 }).listen(8000);
 
 
