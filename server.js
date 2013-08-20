@@ -4,7 +4,7 @@ var https = require('https');
 var app = express();
 
 var options = {
-  key: fs.readFileSync(__dirname+'/Certificates/privatekey.pem'),
+  key: fs.readFileSync(__dirname+'/Certificates/server.key'),
   cert: fs.readFileSync(__dirname+'/Certificates/server.pem')
 };
 app.get('/',function (req,res) {
