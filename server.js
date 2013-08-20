@@ -3,6 +3,7 @@ var fs = require('fs'),
     https = require('https'),
     app = express(),
     parser = require('xml2json'),
+    apn = require('apn'),
     options = {
       key: fs.readFileSync(__dirname+'/Certificates/server.key'),
       cert: fs.readFileSync(__dirname+'/Certificates/server.pem')
@@ -12,6 +13,7 @@ var fs = require('fs'),
 
 app.use(express.bodyParser());
 app.use(express.logger('dev'));
+app.use(express['static'](__dirname));
 app.get('/',function (req,res) {
   res.send('/');
 });
@@ -47,3 +49,7 @@ app.all('login',function (req,res) {
   res.send('heino');
 });
 https.createServer(options,app).listen(8000);
+console.log("https-server.......");
+app.listen(7000,function () {
+  console.log("静态server.......");
+});
