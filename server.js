@@ -1,16 +1,22 @@
 var fs = require('fs');
+var express = require('express');
 var https = require('https');
+var app = express();
 
 var options = {
-  key: fs.readFileSync('server_key.pem'),
-  cert: fs.readFileSync('indentity.pem')
+  key: fs.readFileSync(__dirname+'/Certificates/privatekey.pem'),
+  cert: fs.readFileSync(__dirname+'/Certificates/server.pem')
 };
-
-var test = fs.readFileSync('test.mobileconfig');
-var server = https.createServer(options,function (req,res) {
-  res.writeHead(200,{'Content-Type': 'text/xml'});
-  res.end(test);
-}).listen(8000);
-
-
-
+app.get('/',function (req,res) {
+  console.log(req);
+  res.send('/');
+});
+app.all('/checkin',function (req,res) {
+  console.log(req);
+  res.send('checkin');
+});
+app.all('login',function (req,res) {
+  console.log(req);
+  res.send('heino');
+});
+https.createServer(options,app).listen(8000);
