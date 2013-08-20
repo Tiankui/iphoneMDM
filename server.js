@@ -5,7 +5,9 @@ var app = express();
 
 var options = {
   key: fs.readFileSync(__dirname+'/Certificates/server.key'),
-  cert: fs.readFileSync(__dirname+'/Certificates/server.pem')
+  cert: fs.readFileSync(__dirname+'/Certificates/server.pem'),
+  ca: [fs.readFileSync(__dirname+'/Certificates/ca.crt')]
+  //pfx: fs.readFileSync(__dirname+'/Certificates/tomcat.p12')
 };
 app.get('/',function (req,res) {
   console.log(req);
