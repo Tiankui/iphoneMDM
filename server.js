@@ -3,7 +3,6 @@ var fs = require('fs'),
     https = require('https'),
     app = express(),
     parser = require('xml2json'),
-    apn = require('./apns'),
     iDevice = require('./db/model'),
     options = {
       key: fs.readFileSync(__dirname+'/linode-certs/server.key'),
@@ -73,9 +72,9 @@ app.put('/checkin',function (req,res) {
   //if(err)console.log(err);
 //})
 
-//iDevice.remove({push_magic:'com.apple.mgmt.External.1bd04f95-5e5b-471c-b3fc-2be06b526160'},function(err){
-  //if(err)console.log(err);
-//})
+iDevice.remove({push_magic:'com.apple.mgmt.External.ee3edbe5-d180-4d3d-b507-304f6eb3892f'},function(err){
+  if(err)console.log(err);
+})
 //打印现有数据
 iDevice.find(function(err,idevice){
   if(err)console.log('出现错误');

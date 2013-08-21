@@ -1,44 +1,95 @@
-var apn = require('apn'),
-options = {"gateway": "gateway.push.apple.com"},
-apnConnection = new apn.Connection(options);
+var sys = require("sys"),
+    tls = require("tls"),
+    fs  = require("fs"),
+    url = require("url"),
+ Buffer = require('buffer').Buffer;
 
-
-var pushToDevice = function (token,payload) {
-  this.token = token;
-  this.payload = payload;
-  this.msg = "You have a new message";
+exports.createServer = function(cert_path, keys_path, host, port) {
+	var options = {};
+	options.cert_path = cert_path;
+	options.keys_path = keys_path;
+	options.host = host || 'gateway.push.apple.com';
+	options.port = port || 2195;
+	
+	var server = new APNS(options);
+	
+	return server;
 };
 
-pushToDevice.prototype.push = function () {
-  var note = new apn.Notification();
-  note.payload = this.payload;
-  note.alert = msg;
-  var device = new apn.Device(this.token);
-  apnConnection.pushNotification(note,device);
+APNS = function(options) {
+	var self = this;
+	var keyPem 	= fs.readFileSync(url.resolve(__dirname,options.keys_path));
+	var certPem = fs.readFileSync(url.resolve(__dirname,options.cert_path));
+	var cred = { key:keyPem, cert:certPem };
+	
+	var client = this.client = tls.connect(options.port, options.host, cred, function() {
+		this.connected = true;
+		if (client.authorized) {
+			client.setEncoding('utf-8');
+			connected(self);
+		} else {
+			console.log(client.authorizationError);
+			connected(null);
+		}
+	});
+	self.waiting_buffers = [];
+	
+	client.addListener('data', function(data) { console.log(data); });
+	client.addListener('error', function(error) {
+		if (!this.connected) { connected(null); }
+		console.log("FAIL: "+error);
+	});
+	client.addListener('close', function() {});
 };
 
-module.exports = pushToDevice;
-var data = [{
-  push_magic: 'EE1B89F3-9E2D-49EC-BB7D-D79625E15187',
-  token: '9M9i7HCuh6fZ7ZGUMzEPHE2q0fRPrSzXaQ8/aVwsWYI=',
-  topic: 'com.apple.mgmt.External.1bd04f95-5e5b-471c-b3fc-2be06b526160',
-  uuid: 'ef7756dcc50295b6f220d25f418c8d1fa539131e'
-},
-{ 
-  push_magic: '8491AFAA-34CA-47F1-8F74-0ACC38A6D79E',
-  token: 'J8zhk3mQIlh7IGfXgBdlDZXA1ztO23h9Vy2toK03UII=',
-  topic: 'com.apple.mgmt.External.1bd04f95-5e5b-471c-b3fc-2be06b526160',
-  uuid: '5be35fbd2b6c699bd38ada658992e1884c54b568'
-},
-{ push_magic: '0F5577FF-957E-4D91-9916-A5343712C7A5',
-  token: 'GVaUGQZLzxGLgfSvXY0loTHSB3+WS57FIGRJZdy1mrA=',
-  topic: 'com.apple.mgmt.External.1bd04f95-5e5b-471c-b3fc-2be06b526160',
-  uuid: '3774c2715ee6d40ccd4bcd5dede9ece6c25dcba4'
-}];
+function connected(server) {
+    if (server.client) {
+    	server.waiting_buffers.forEach(function(b){
+    		server.client.write(b);
+    	});
+    } else {
+		console.log("Connection failed");
+		server.end();
+    }
+};
 
-data.forEach(function (device) {
-  console.log(device);
-  var pushMSG = new pushToDevice(new Buffer(device.token).toString('base64'),{"mdm":device.push_magic});
-  pushMSG.push();
-});
+APNS.prototype.notify = function(device_id, obj) {
+	var json = JSON.stringify({'aps':obj});
+  
+	var buffer = this.notification_buffer(device_id, json);
+	if (this.client.readyState == 'open') {
+		this.client.write(buffer);
+	} else {
+		this.waiting_buffers.push(buffer);
+	}
+	return this;
+};
 
+APNS.prototype.HEXpack = function(str){
+	var p=[];
+	for (var i=0;i<str.length;i=i+2) { p.push(parseInt(str[i]+str[i+1], 16)); }
+	return p
+};
+
+APNS.prototype.ASCIIpack = function(str){
+	var p=[];
+	for (var i=0;i<str.length;i++) { p.push(str.charCodeAt(i)); }
+	return p;
+};
+
+APNS.prototype.notification_buffer = function(device_id, json) {
+	var a = [0,0,32].concat( this.HEXpack(device_id), [0,json.length], this.ASCIIpack(json) );
+	
+	var buffer = new Buffer(a.length);
+	var count = 0;
+	a.forEach(function(e) {
+		buffer[count] = e;
+		count++;
+	});
+	
+	return buffer;
+};
+
+APNS.prototype.end = function() {
+ 	this.client.end();
+};
