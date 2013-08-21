@@ -26,16 +26,38 @@ app.put('/checkin',function (req,res) {
     content += data;
     var json_content = JSON.parse(parser.toJson(content)).plist.dict;
     if (json_content.string[0] !== 'Authenticate') {
-      console.log('====================TokenUpdate=====================');
-      //取得信息
-      var _device = new iDevice({
-        push_magic: json_content.string[1],
-        token: json_content.data,
-        topic: json_content.string[2],
-        uuid: json_content.string[3]
+      console.log('====================TokenUpdate=====================\n');
+      iDevice.find({uuid:json_content.string[3]},function(err,_device){
+        if(_device[0]){
+          _device[0].update(
+            {push_magic: json_content.string[1]},
+            {token: json_content.data},
+            {topic: json_content.string[2]},
+            {uuid: json_content.string[3]},
+            function(err,numberAffected){
+              if (err) return handleError(err);
+              console.log('The number of updated documents was %d', numberAffected);
+              console.log('The raw response from Mongo was ', raw);
+            }
+          )
+          console.log("===========update device:\n"+_device+"\n");
+        }else{
+          //取得信息
+          var newDevice = new iDevice({
+            push_magic: json_content.string[1],
+            token: json_content.data,
+            topic: json_content.string[2],
+            uuid: json_content.string[3]
+          });
+          console.log("===========new device\n"+newDevice+"\n");
+          newDevice.save(function(err,idevice){
+            if(err)console.log('idevice无法储存');
+            idevice.speak();
+          })
+        }
       });
-      console.log(json_content);
-      console.log(_device);
+      //console.log(json_content);
+//      console.log(_device);
       console.log('====================END=====================');
     }else{
       console.log("===============认证阶段可再次加判断中断================");
@@ -46,6 +68,14 @@ app.put('/checkin',function (req,res) {
   res.send('//');
 });
 
+//iDevice.remove({uuid:'ef7756dcc50295b6f220d25f418c8d1fa539131e'},function(err){
+  //if(err)console.log(err);
+//})
+//打印现有数据
+iDevice.find(function(err,idevice){
+  if(err)console.log('出现错误');
+  console.log(idevice);
+})
 app.all('login',function (req,res) {
   res.send('heino');
 });
