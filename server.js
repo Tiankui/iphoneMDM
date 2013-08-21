@@ -25,6 +25,7 @@ app.put('/checkin',function (req,res) {
   req.on("data",function(data){
     content += data;
     var json_content = JSON.parse(parser.toJson(content)).plist.dict;
+    console.log(json_content);
     if (json_content.string[0] !== 'Authenticate') {
       console.log('====================TokenUpdate=====================\n');
       iDevice.find({uuid:json_content.string[3]},function(err,_device){
@@ -69,6 +70,10 @@ app.put('/checkin',function (req,res) {
 });
 
 //iDevice.remove({uuid:'ef7756dcc50295b6f220d25f418c8d1fa539131e'},function(err){
+  //if(err)console.log(err);
+//})
+
+//iDevice.remove({push_magic:'com.apple.mgmt.External.1bd04f95-5e5b-471c-b3fc-2be06b526160'},function(err){
   //if(err)console.log(err);
 //})
 //打印现有数据
