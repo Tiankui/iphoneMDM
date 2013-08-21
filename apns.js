@@ -10,7 +10,7 @@ var pushToDevice = function (token,payload) {
 };
 
 pushToDevice.prototype.push = function () {
-  var note = new apn.apn.Notification();
+  var note = new apn.Notification();
   note.payload = this.payload;
   var device = new apn.Device(this.token);
   apnConnection.push(note,device);
