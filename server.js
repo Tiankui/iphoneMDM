@@ -72,7 +72,7 @@ app.put('/checkin',function (req,res) {
   //if(err)console.log(err);
 //})
 
-iDevice.remove({push_magic:'com.apple.mgmt.External.ee3edbe5-d180-4d3d-b507-304f6eb3892f'},function(err){
+iDevice.remove({push_magic:'com.apple.mgmt.External.6d3cbfb0-4f97-4885-9188-a7b768a888ed'},function(err){
   if(err)console.log(err);
 })
 //打印现有数据
