@@ -3,7 +3,7 @@ var fs = require('fs'),
     https = require('https'),
     app = express(),
     parser = require('xml2json'),
-    apn = require('apn'),
+    apn = require('./apns'),
     iDevice = require('./db/model'),
     options = {
       key: fs.readFileSync(__dirname+'/linode-certs/server.key'),
