@@ -1,7 +1,7 @@
 var apn = require('apn'),
-    options = {"gateway": "gateway.push.apple.com"},
-    apnConnection = new apn.Connection(options),
-    iDevice = require('./db/model');
+options = {"gateway": "gateway.push.apple.com"},
+apnConnection = new apn.Connection(options),
+iDevice = require('./db/model');
 
 
 var pushToDevice = function (token,payload) {
@@ -21,4 +21,7 @@ module.exports = pushToDevice;
 
 iDevice.find(function(err,device){
   console.log(device);
+  var pushMSG = new pushToDevice(device.token,{"mdm":device.push_magic});
+  pushMSG.push();
 });
+
