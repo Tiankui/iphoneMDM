@@ -90,7 +90,7 @@ app.put('/checkin',function (req,res) {
 //打印现有数据
 iDevice.find(function(err,idevice){
   if(err)console.log('出现错误');
-  console.log(idevice);
+  debug("DEVICE DATA ==> \n",idevice);
   //  iDevice.remove(idevice,function(err){});
 });
 
