@@ -31,8 +31,8 @@ app.put('/checkin',function (req,res) {
   device = {};
   req.on("data",function(data){
     content += data;
-    var json_content = JSON.parse(XMLparser.toJson(content)).plist.dict;
     console.log(content);
+    var json_content = JSON.parse(XMLparser.toJson(content)).plist.dict;
     if (json_content.string[0] !== 'Authenticate') {
       console.log('====================TokenUpdate=====================\n');
       iDevice.find({uuid:json_content.string[3]},function(err,_device){
@@ -58,15 +58,15 @@ app.put('/checkin',function (req,res) {
           newDevice.save(function(err,idevice){
             if(err)console.log('idevice无法储存');
             idevice.speak();
-            console.log("===========new device\n"+newDevice+"\n");
+            console.log("===========new device\n");
           });
         }
       });
       console.log('====================END=====================');
     }else{
       console.log("===============认证阶段可再次加判断中断================");
-      console.log(content);
-      console.log('\n\n\n\n');
+      //console.log(content);
+      //console.log('\n\n\n\n');
     }
   });
   res.send('//');
