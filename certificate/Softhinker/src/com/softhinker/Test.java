@@ -90,7 +90,7 @@ public class Test {
 	
 	private PrivateKey extractPrivateKey(String path2keystore) throws KeyStoreException, NoSuchAlgorithmException, CertificateException, FileNotFoundException, IOException, UnrecoverableKeyException
 	{
-		String alias = "zhouweiping";//Change to your alias
+		String alias = "weipingDevKey";//Change to your alias
 		String password = "111111";//Change to your password
 		
 		KeyStore caKs = KeyStore.getInstance("PKCS12");

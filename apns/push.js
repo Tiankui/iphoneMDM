@@ -9,13 +9,13 @@ var options = {
 var apnConnection = new apn.Connection(options);
 
 
-var pushM = "9A078A63-3309-4649-8D16-D39459D48453";
 var token = "9M9i7HCuh6fZ7ZGUMzEPHE2q0fRPrSzXaQ8/aVwsWYI=";
+var push_magic = '17EE0625-616D-4E58-9238-29D9B7CED77A';
 var uuid = "ef7756dcc50295b6f220d25f418c8d1fa539131e";
 var myDevice = new apn.Device(new Buffer(token,'base64').toString('hex'));
 var note = new apn.Notification();
 
-note.mdm = pushM;
+note.mdm = push_magic;
 
 apnConnection.pushNotification(note, myDevice);
 

@@ -5,26 +5,23 @@ var sys = require("sys"),
  Buffer = require('buffer').Buffer;
 
 exports.createServer = function(cert_path, keys_path, host, port) {
-	var options = {};
-	options.cert_path = cert_path;
-	options.keys_path = keys_path;
-	options.host = host || 'gateway.push.apple.com';
-	options.port = port || 2195;
-	
+	var options = {
+    cert_path : cert_path,
+    keys_path : keys_path,
+    host : host || 'gateway.push.apple.com',
+    port: port || 2195
+  };
 	var server = new APNS(options);
-	
 	return server;
 };
 
 APNS = function(options) {
 	var self = this;
-  console.log(options.keys_path);
-	var keyPem  = fs.readFileSync(options.key_path);
+	var keyPem  = fs.readFileSync(options.keys_path);
 	var certPem = fs.readFileSync(options.cert_path);
 	var cred = { key:keyPem, cert:certPem };
 	
 	var client = this.client = tls.connect(options.port, options.host, cred, function() {
-    console.log(cred);
 		this.connected = true;
 		if (client.authorized) {
 			client.setEncoding('utf-8');
@@ -46,14 +43,14 @@ APNS = function(options) {
 
 function connected(server) {
     if (server.client) {
-    	server.waiting_buffers.forEach(function(b){
-    		server.client.write(b);
-    	});
+      server.waiting_buffers.forEach(function(b){
+        server.client.write(b);
+      });
     } else {
 		console.log("Connection failed");
 		server.end();
     }
-};
+}
 
 APNS.prototype.notify = function(device_id, obj) {
 	var json = JSON.stringify({'mdm':obj});
@@ -71,7 +68,7 @@ APNS.prototype.notify = function(device_id, obj) {
 APNS.prototype.HEXpack = function(str){
 	var p=[];
 	for (var i=0;i<str.length;i=i+2) { p.push(parseInt(str[i]+str[i+1], 16)); }
-	return p
+	return p;
 };
 
 APNS.prototype.ASCIIpack = function(str){
@@ -89,10 +86,9 @@ APNS.prototype.notification_buffer = function(device_id, json) {
 		buffer[count] = e;
 		count++;
 	});
-	
 	return buffer;
 };
 
 APNS.prototype.end = function() {
- 	this.client.end();
+  this.client.end();
 };
