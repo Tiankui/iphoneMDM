@@ -1,10 +1,20 @@
-var fs = require('fs'),
-express = require('express'),
-https = require('https'),
-app = express(),
-XMLparser = require('xml2json'),
-iDevice = require('./db/model'),
-options = {
+var fs = require('fs');
+var express = require('express');
+var https = require('https');
+var app = express();
+var XMLparser = require('xml2json');
+var iDevice = require('./db/model');
+var debug = function () {};
+if(process.env.DEBUG){
+  try {
+    debug = require('debug')('app');
+  } catch(e) {
+    console.log("Notice: 'debug' module is not available.");
+    debug = function () {};
+  }
+}
+
+var options = {
   key: fs.readFileSync(__dirname+'/linode/identity.key'),
   cert: fs.readFileSync(__dirname+'/linode/identity.crt'),
   ca: [fs.readFileSync(__dirname+'/linode/cacert.crt')]
@@ -20,71 +30,73 @@ app.get('/',function (req,res) {
 app.put('/login',function(req,res) {
   var content = '',
   device ={};
-  req.on('data',function (req,res) {
+  req.on('data',function (data) {
     content += data;
-    var json_content = JSON.parse(XMLparser.toJson(content));
-    console.log(json_content);
+    debug("/login[PUT]:",content);
   });
 });
+
 app.put('/checkin',function (req,res) {
   var content = '',
   device = {};
   req.on("data",function(data){
     content += data;
-    console.log(content);
     var json_content = JSON.parse(XMLparser.toJson(content)).plist.dict;
+
     if (json_content.string[0] !== 'Authenticate') {
-      console.log('====================TokenUpdate=====================\n');
-      iDevice.find({uuid:json_content.string[3]},function(err,_device){
-        console.log(_device);
+
+      var pushMagic = json_content.string[1];
+      var token = json_content.data[0];
+      var topic = json_content.string[2];
+      var uuid = json_content.string[3];
+
+      debug("/checkin[put]:UPDATE[XML] =>\n",content);
+      debug("/checkin[put]:UPDATE[JSON] =>\n",json_content);
+
+      iDevice.find({uuid:uuid},function(err,_device){
         if(_device[0]){
+          debug("update old device date.");
           _device[0].update(
-            {push_magic: json_content.string[1]},
-            {token: json_content.data[0]},
-            {topic: json_content.string[2]},
-            {uuid: json_content.string[3]},
+            {push_magic: pushMagic},
+            {token: token},
+            {topic: topic},
+            {uuid: uuid},
             function(err,numberAffected){
               if (err) return handleError(err);
-              console.log("===========hasUpdate device:\n");
             }
           );
         }else{
           //取得信息
+          debug("new device data\n");
           var newDevice = new iDevice({
-            push_magic: json_content.string[1],
-            token: json_content.data[0],
-            topic: json_content.string[2],
-            uuid: json_content.string[3]
+            push_magic: pushMagic,
+            token: token,
+            topic: topic,
+            uuid: uuid
           });
           newDevice.save(function(err,idevice){
-            if(err)console.log('idevice无法储存');
+            if(err) debug('idevice无法储存');
             idevice.speak();
-            console.log("===========new device\n");
           });
         }
       });
-      console.log('====================END=====================');
     }else{
-      console.log("===============认证阶段可再次加判断中断================");
-      //console.log(content);
-      //console.log('\n\n\n\n');
+      debug("/checkin[put]:Authenticate");
     }
   });
   res.send('//');
 });
 
-//iDevice.remove({uuid:'ef7756dcc50295b6f220d25f418c8d1fa539131e'},function(err){
-//if(err)console.log(err);
-//})
-
 //打印现有数据
 iDevice.find(function(err,idevice){
   if(err)console.log('出现错误');
   console.log(idevice);
-//  iDevice.remove(idevice,function(err){});
+  //  iDevice.remove(idevice,function(err){});
 });
+
 https.createServer(options,app).listen(8000);
-console.log("https-server.......");
+debug("port:8000,https-server");
+
 app.listen(7000,function () {
-  console.log("静态server.......");
+  debug("port:7000,http-server.");
 });
