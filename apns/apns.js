@@ -27,6 +27,7 @@ APNS = function(options) {
 			client.setEncoding('utf-8');
 			connected(self);
 		} else {
+      console.log(21212);
 			console.log(client.authorizationError);
 			connected(null);
 		}
@@ -37,6 +38,7 @@ APNS = function(options) {
 	client.addListener('error', function(error) {
 		if (!this.connected) { connected(null); }
 		console.log("FAIL: "+error);
+    console.log(error);
 	});
 	client.addListener('close', function() {});
 };
