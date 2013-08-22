@@ -38,7 +38,7 @@ app.put('/checkin',function (req,res) {
         if(_device[0]){
           _device[0].update(
             {push_magic: json_content.string[1]},
-            {token: json_content.data},
+            {token: json_content.data[0]},
             {topic: json_content.string[2]},
             {uuid: json_content.string[3]},
             function(err,numberAffected){
@@ -50,7 +50,7 @@ app.put('/checkin',function (req,res) {
           //取得信息
           var newDevice = new iDevice({
             push_magic: json_content.string[1],
-            token: json_content.data,
+            token: json_content.data[0],
             topic: json_content.string[2],
             uuid: json_content.string[3]
           });
