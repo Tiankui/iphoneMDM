@@ -18,8 +18,9 @@ exports.createServer = function(cert_path, keys_path, host, port) {
 
 APNS = function(options) {
 	var self = this;
-	var keyPem 	= fs.readFileSync(url.resolve(__dirname,options.keys_path));
-	var certPem = fs.readFileSync(url.resolve(__dirname,options.cert_path));
+  console.log(options.keys_path);
+	var keyPem  = fs.readFileSync(options.key_path);
+	var certPem = fs.readFileSync(options.cert_path);
 	var cred = { key:keyPem, cert:certPem };
 	
 	var client = this.client = tls.connect(options.port, options.host, cred, function() {
