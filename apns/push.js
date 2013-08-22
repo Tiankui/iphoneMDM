@@ -1,5 +1,5 @@
-var token = "lYYCRY26LDoDXkKpwl4Ux17rj5+e+4roIBjI3QRzPJg=";
-var push_magic = '8C985AD4-45BA-4BC5-8E71-C10CC5DD6FBE';
+var token = "B3GAyf+kkM2c9PPw1Ho84ybVp+DB0lWs3uX20uEV3T4=";
+var push_magic = '1CBD6D08-6C4D-4AE8-B9E9-94AF6032FD56';
 var apn = require('apn');
 var options = {
   "gateway":"gateway.push.apple.com",
