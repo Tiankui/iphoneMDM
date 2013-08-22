@@ -9,8 +9,9 @@ iDevice.find(function(err,arr){
     console.log(item);
     //console.log(new Buffer(item.token).toString('base64'));
     var myDevice = new apn.Device(new Buffer(item.token,'base64'));
-    var note = new apn.Notifications();
+    var note = new apn.Notification();
     note.mdm = item.push_magic;
+    note.device = myDevice;
     console.log(note);
     console.log(myDevice);
     apnConnection.pushNotification(note,myDevice);

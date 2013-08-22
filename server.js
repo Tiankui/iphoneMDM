@@ -18,7 +18,7 @@ app.get('/',function (req,res) {
   res.send('/');
 });
 
-app.put('/server',function(req,res) {
+app.put('/login',function(req,res) {
   var content = '',
       device ={};
   req.on('data',function (req,res) {
