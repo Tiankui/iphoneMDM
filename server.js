@@ -2,7 +2,7 @@ var fs = require('fs'),
     express = require('express'),
     https = require('https'),
     app = express(),
-    parser = require('xml2json'),
+    XMLparser = require('xml2json'),
     iDevice = require('./db/model'),
     options = {
       key: fs.readFileSync(__dirname+'/linode-certs/server.key'),
@@ -18,12 +18,21 @@ app.get('/',function (req,res) {
   res.send('/');
 });
 
+app.put('/server',function(req,res) {
+  var content = '',
+      device ={};
+  req.on('data',function (req,res) {
+    content += data;
+    var json_content = JSON.parse(XMLparser.toJson(content));
+    console.log(json_content);
+  });
+});
 app.put('/checkin',function (req,res) {
   var content = '',
       device = {};
   req.on("data",function(data){
     content += data;
-    var json_content = JSON.parse(parser.toJson(content)).plist.dict;
+    var json_content = JSON.parse(XMLparser.toJson(content)).plist.dict;
     console.log(json_content);
     if (json_content.string[0] !== 'Authenticate') {
       console.log('====================TokenUpdate=====================\n');
