@@ -36,6 +36,7 @@ app.put('/checkin',function (req,res) {
     if (json_content.string[0] !== 'Authenticate') {
       console.log('====================TokenUpdate=====================\n');
       iDevice.find({uuid:json_content.string[3]},function(err,_device){
+        console.log(_device);
         if(_device[0]){
           _device[0].update(
             {push_magic: json_content.string[1]},

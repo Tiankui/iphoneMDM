@@ -1,6 +1,5 @@
-var token = "B3GAyf+kkM2c9PPw1Ho84ybVp+DB0lWs3uX20uEV3T4=";
-var push_magic = '3B80E184-CF1E-4CAE-BE71-347A99AA11D3';
-var uuid = "ef7756dcc50295b6f220d25f418c8d1fa539131e";
+var token = "lYYCRY26LDoDXkKpwl4Ux17rj5+e+4roIBjI3QRzPJg=";
+var push_magic = '8C985AD4-45BA-4BC5-8E71-C10CC5DD6FBE';
 var apn = require('apn');
 var options = {
   "gateway":"gateway.push.apple.com",
