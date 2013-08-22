@@ -52,29 +52,32 @@ app.put('/checkin',function (req,res) {
 
       debug("/checkin[put]:UPDATE[XML] =>\n",content);
       debug("/checkin[put]:UPDATE[JSON] =>\n",json_content);
+      debug("!!!!!!!!!!!!!!!!!!",token);
 
       iDevice.find({uuid:uuid},function(err,_device){
-        if(_device[0]){
+        if(_device.length){
           debug("update old device date.");
-          _device[0].update(
-            {push_magic: pushMagic},
-            {token: token},
-            {topic: topic},
-            {uuid: uuid},
-            function(err,numberAffected){
-              if (err) return handleError(err);
-            }
-          );
+          _device.forEach(function(item){
+            iDevice.remove(item,function(err){debug("mongodb err:",err)});
+          });
+          (new iDevice({
+            push_magic: pushMagic,
+            token: token,
+            topic: topic,
+            uuid: uuid}))
+          .save(function(err,idevice){
+            if(err) debug('idevice无法储存');
+            idevice.speak();
+          });
         }else{
           //取得信息
           debug("new device data\n");
-          var newDevice = new iDevice({
+          (new iDevice({
             push_magic: pushMagic,
             token: token,
             topic: topic,
             uuid: uuid
-          });
-          newDevice.save(function(err,idevice){
+          })).save(function(err,idevice){
             if(err) debug('idevice无法储存');
             idevice.speak();
           });
