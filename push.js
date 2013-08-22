@@ -13,6 +13,7 @@ iDevice.find(function(err,arr){
     note.mdm = item.push_magic;
     console.log(note);
     console.log(myDevice);
+    apnConnection.pushNotification(note,myDevice);
 
   });
   // console.log(myDevice);
