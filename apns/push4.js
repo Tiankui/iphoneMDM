@@ -8,12 +8,10 @@ var push_magic = '17EE0625-616D-4E58-9238-29D9B7CED77A';
 /* 
    Now you may send notifications!
  */
-console.log(11111111111);
 
 var Push = apn.Push;
 var push = Push({
   cert: require('fs').readFileSync(__dirname+'/cert.pem'), 
-
   key: require('fs').readFileSync(__dirname+'/key.pem')
 });
 push.on('sent', function (notification) {
