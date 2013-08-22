@@ -1,7 +1,13 @@
 var apn = require('apn');
-var options = {"gateway": "gateway.push.apple.com"};
+var options = {
+  "gateway": "gateway.push.apple.com",
+  "batchFeedback": true,
+  "interval": 300
+
+};
 var apnConnection = new apn.Connection(options);
 var iDevice = require('./db/model');
+var feedback = new apn.Feekback(options);
 
 iDevice.find(function(err,arr){
   if(err)console.log('出现错误');
@@ -18,4 +24,10 @@ iDevice.find(function(err,arr){
 
   });
   // console.log(myDevice);
+});
+
+feedback.on("feedback",function(devices){
+  devices.forEach(function (item) {
+    console.log(item);
+  });
 });
