@@ -7,7 +7,7 @@ var options = {
 };
 var apnConnection = new apn.Connection(options);
 var iDevice = require('./db/model');
-var feedback = new apn.Feekback(options);
+var feedback = new apn.Feedback(options);
 
 iDevice.find(function(err,arr){
   if(err)console.log('出现错误');
