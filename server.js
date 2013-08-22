@@ -5,8 +5,9 @@ app = express(),
 XMLparser = require('xml2json'),
 iDevice = require('./db/model'),
 options = {
-  key: fs.readFileSync(__dirname+'/linode-certs/server.key'),
-  cert: fs.readFileSync(__dirname+'/linode-certs/server.pem')
+  key: fs.readFileSync(__dirname+'/linode/identity.key'),
+  cert: fs.readFileSync(__dirname+'/linode/identity.crt'),
+  ca: [fs.readFileSync(__dirname+'/linode/cacert.crt')]
 };
 
 app.use(express.bodyParser());
@@ -79,7 +80,7 @@ app.put('/checkin',function (req,res) {
 iDevice.find(function(err,idevice){
   if(err)console.log('出现错误');
   console.log(idevice);
-  iDevice.remove(idevice,function(err){});
+//  iDevice.remove(idevice,function(err){});
 });
 https.createServer(options,app).listen(8000);
 console.log("https-server.......");
