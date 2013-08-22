@@ -9,7 +9,10 @@ iDevice.find(function(err,arr){
     console.log(item);
     //console.log(new Buffer(item.token).toString('base64'));
     var myDevice = new apn.Device(new Buffer(item.token,'base64'));
+    var note = new apn.Notifications();
+    note.mdm = item.push_magic;
+    console.log(note);
     console.log(myDevice);
   });
   // console.log(myDevice);
-})
+});
