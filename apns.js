@@ -23,6 +23,7 @@ APNS = function(options) {
 	var cred = { key:keyPem, cert:certPem };
 	
 	var client = this.client = tls.connect(options.port, options.host, cred, function() {
+    console.log(cred);
 		this.connected = true;
 		if (client.authorized) {
 			client.setEncoding('utf-8');
@@ -54,7 +55,8 @@ function connected(server) {
 };
 
 APNS.prototype.notify = function(device_id, obj) {
-	var json = JSON.stringify({'aps':obj});
+	var json = JSON.stringify({'mdm':obj});
+  console.log(json);
   
 	var buffer = this.notification_buffer(device_id, json);
 	if (this.client.readyState == 'open') {
