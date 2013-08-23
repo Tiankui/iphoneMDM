@@ -1,0 +1,23 @@
+{
+  "name": "MDM",
+  "version": "0.1.0",
+  "author": "tiankui",
+  "description": "apple MDM Test",
+  "scripts": {
+    "start": "node app"
+  },
+  "dependencies" : {
+    "apn":"*",
+    "express":"*",
+    "mongodb":"*",
+    "mongoose":"*",
+    "xml2json":"*"
+  },
+  "devDependencies": {
+    "debug":"*"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=0.6"
+  }
+}
