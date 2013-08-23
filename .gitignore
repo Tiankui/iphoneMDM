@@ -1,0 +1,9 @@
+.DS_Store
+*.swp
+*.lock
+tags
+node_modules/
+*.der
+*.pem
+*.p12
+*.pfx
