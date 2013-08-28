@@ -11,7 +11,9 @@
     "express":"*",
     "mongodb":"*",
     "mongoose":"*",
-    "xml2json":"*"
+    "xml2json":"*",
+    "ejs":"*",
+    "node-uuid":"*"
   },
   "devDependencies": {
     "debug":"*"

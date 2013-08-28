@@ -1,8 +1,9 @@
 var fs = require('fs');
+var uuid = require('node-uuid');
 
 function installMobileConfig(req,res) {
-  var installFile = fs.readFileSync(__dirname + '/../../install.mobileconfig');
-  res.send(installFile);
+  res.set('Content-type','application/xml');
+  res.render('install.mobileconfig',{organization:"baidu"});
 }
 
 module.exports = installMobileConfig;
