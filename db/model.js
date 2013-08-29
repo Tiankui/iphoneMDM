@@ -9,10 +9,11 @@ var deviceShema = new mongoose.Schema({
   topic:String,
   uuid:String
 });
+
 deviceShema.methods.speak = function () {
   var greeting = "===UUID:"+this.uuid+"\n===TOKEN:"+this.token+"\n===TOPIC:"+this.topic+"\n===PUSHMAGIC:"+this.push_magic;
   console.log(greeting);
-}
+};
 
 var device = mongoose.model('Device',deviceShema);
 
