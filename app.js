@@ -3,7 +3,7 @@ var iDevice = require('./db/model');
 var https_server = require('./https');
 var http = require('./http');
 var config = require('./config');
-var debug = function () {};
+debug = function () {};
 
 if(process.env.DEBUG){
   try {
@@ -17,8 +17,8 @@ if(process.env.DEBUG){
 //打印现有数据
 iDevice.find(function(err,idevice){
   if(err)console.log('出现错误');
+  //iDevice.remove(idevice,function(err){});
   debug("DEVICE DATA ==> \n",idevice);
-  //  iDevice.remove(idevice,function(err){});
 });
 
 https.createServer(config.httpsOptions,https_server).listen(8000);

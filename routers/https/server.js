@@ -1,4 +1,5 @@
 
+var XMLparser = require('xml2json');
 var iDevice = require('../../db/model');
 
 function server(res,req) {
@@ -7,6 +8,7 @@ function server(res,req) {
   req.on('data',function (data) {
     content += data;
     debug("/login[PUT]:",content);
+    
   });
 }
 
